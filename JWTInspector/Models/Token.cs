@@ -34,7 +34,7 @@ public class TokenViewModel: INotifyPropertyChanged
         var header = JsonSerializer.Deserialize<Header>(DecodeSegment(tokenComponents.First()), opts)!;
         var body = JsonNode.Parse(DecodeSegment(tokenComponents.Skip(1).First()))!;
         var signature = tokenComponents.Last();
-        Token = new Token(header, body.AsObject().Select(kvp => new KeyValuePair<string, string>(kvp.Key, kvp.Value!.ToJsonString())), signature);
+        Token = new Token(header, body.AsObject().Select(kvp => new BodyElement(kvp.Key, kvp.Value!.ToJsonString(), kvp.ToToolTip())), signature);
     }
 
     private string DecodeSegment(string input)
@@ -43,12 +43,33 @@ public class TokenViewModel: INotifyPropertyChanged
     }
 }
 
+public static class JsonNodeExtensions
+{
+    private static DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    public static string ToToolTip(this KeyValuePair<string, JsonNode?> item)
+    {
+        if (item.Value is null || item.Value is not JsonValue)
+        {
+            return string.Empty;
+        }
+
+        var value = item.Value.AsValue();
+        return item.Key switch
+        {
+            "exp" => string.Format("Expires on {0}", UnixEpoch.AddSeconds((long)value).ToString("o")),
+            "nbf" => string.Format("Valid from {0}", UnixEpoch.AddSeconds((long)value).ToString("o")),
+            "iat" => string.Format("Issued on {0}", UnixEpoch.AddSeconds((long)value).ToString("o")),
+            _ => string.Empty
+        };
+    }
+}
+
 public class Token: INotifyPropertyChanged
 {
-    private Header _header;
-    public Header Header { get { return _header; } set { _header = value; OnNotifyPropertyChanged(nameof(Header)); } }
-    private ObservableCollection<KeyValuePair<string, string>> _body;
-    public ObservableCollection<KeyValuePair<string, string>> Body { get { return _body; } set { _body = value; OnNotifyPropertyChanged(nameof(Body)); } }
+    private Header? _header;
+    public Header? Header { get { return _header; } set { _header = value; OnNotifyPropertyChanged(nameof(Header)); } }
+    private ObservableCollection<BodyElement> _body;
+    public ObservableCollection<BodyElement> Body { get { return _body; } set { _body = value; OnNotifyPropertyChanged(nameof(Body)); } }
     private string _signature;
     public string Signature { get { return _signature; } set { _signature = value; OnNotifyPropertyChanged(nameof(Signature)); } }
 
@@ -56,13 +77,15 @@ public class Token: INotifyPropertyChanged
 
     protected void OnNotifyPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-    public Token(Header header, IEnumerable<KeyValuePair<string, string>> body, string signature)
+    public Token(Header? header, IEnumerable<BodyElement> body, string signature)
     {
         _header = header;
-        _body = new ObservableCollection<KeyValuePair<string, string>>(body);
+        _body = new ObservableCollection<BodyElement>(body);
         _signature = signature;
     }
 }
+
+public record BodyElement(string Key, string Value, string ToolTip) { }
 
 public record Header([property: JsonPropertyName("alg")] TokenSignatureAlgorithm Algorithm, [property: JsonPropertyName("typ")] TokenKind Kind) { }
 
