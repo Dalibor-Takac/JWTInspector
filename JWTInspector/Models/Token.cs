@@ -11,8 +11,24 @@ using System.Text.Json.Serialization;
 namespace JWTInspector.Models;
 public class TokenViewModel: INotifyPropertyChanged
 {
+    private string? _tokenString;
+    public string? TokenString
+    {
+        get { return _tokenString; }
+        set
+        {
+            _tokenString = value;
+            OnPropertyChanged(nameof(TokenString));
+            if (!string.IsNullOrEmpty(value))
+                ParseToken(value);
+        }
+    }
+
     private Token? _token;
     public Token? Token { get { return _token; } set { _token = value; OnPropertyChanged(nameof(Token)); } }
+
+    private string? _errorMessage;
+    public string? ErrorMessage { get { return _errorMessage; } set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); } }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -27,14 +43,24 @@ public class TokenViewModel: INotifyPropertyChanged
             .ToArray();
 
         if (tokenComponents.Length != 3)
-            throw new ArgumentException("Serialized token value is invalid, it does not contain 3 components", nameof(token));
+        {
+            ErrorMessage = "Serialized token value is invalid, it does not contain 3 components";
+            return;
+        }
 
         var opts = new JsonSerializerOptions(JsonSerializerDefaults.Web);
         opts.Converters.Add(new JsonStringEnumConverter());
-        var header = JsonSerializer.Deserialize<Header>(DecodeSegment(tokenComponents.First()), opts)!;
-        var body = JsonNode.Parse(DecodeSegment(tokenComponents.Skip(1).First()))!;
-        var signature = tokenComponents.Last();
-        Token = new Token(header, body.AsObject().Select(kvp => new BodyElement(kvp.Key, kvp.Value!.ToJsonString(), kvp.ToToolTip())), signature);
+        try
+        {
+            var header = JsonSerializer.Deserialize<Header>(DecodeSegment(tokenComponents.First()), opts)!;
+            var body = JsonNode.Parse(DecodeSegment(tokenComponents.Skip(1).First()))!;
+            var signature = tokenComponents.Last();
+            Token = new Token(header, body.AsObject().Select(kvp => new BodyElement(kvp.Key, kvp.Value!.ToJsonString(), kvp.ToToolTip())), signature);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
     }
 
     private string DecodeSegment(string input)
@@ -46,7 +72,7 @@ public class TokenViewModel: INotifyPropertyChanged
 public static class JsonNodeExtensions
 {
     private static DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-    public static string ToToolTip(this KeyValuePair<string, JsonNode?> item)
+    public static string? ToToolTip(this KeyValuePair<string, JsonNode?> item)
     {
         if (item.Value is null || item.Value is not JsonValue)
         {
@@ -59,7 +85,7 @@ public static class JsonNodeExtensions
             "exp" => string.Format("Expires on {0}", UnixEpoch.AddSeconds((long)value).ToString("o")),
             "nbf" => string.Format("Valid from {0}", UnixEpoch.AddSeconds((long)value).ToString("o")),
             "iat" => string.Format("Issued on {0}", UnixEpoch.AddSeconds((long)value).ToString("o")),
-            _ => string.Empty
+            _ => null
         };
     }
 }
@@ -85,7 +111,7 @@ public class Token: INotifyPropertyChanged
     }
 }
 
-public record BodyElement(string Key, string Value, string ToolTip) { }
+public record BodyElement(string Key, string Value, string? ToolTip) { }
 
 public record Header([property: JsonPropertyName("alg")] TokenSignatureAlgorithm Algorithm, [property: JsonPropertyName("typ")] TokenKind Kind) { }
 

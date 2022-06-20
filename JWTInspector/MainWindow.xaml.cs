@@ -11,22 +11,19 @@ namespace JWTInspector;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private readonly TokenViewModel _tokenVM;
     public MainWindow()
     {
+        _tokenVM = new TokenViewModel();
         InitializeComponent();
+        DataContext = _tokenVM;
     }
 
-    private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+    private void Button_Click(object sender, RoutedEventArgs e)
     {
-        var token = new TokenViewModel();
-        try
-        {
-            token.ParseToken((sender as TextBox ?? throw new ArgumentException("Sender of event was not a TextBox")).Text);
-        }
-        catch (Exception ex)
-        {
-            token.Token = new Token(null, Enumerable.Empty<BodyElement>(), $"Failed to parse the token, {ex.Message}");
-        }
-        DataContext = token;
+        _tokenVM.TokenString = null;
+        _tokenVM.ErrorMessage = null;
+        _tokenVM.Token = null;
+        txtToken.Focus();
     }
 }

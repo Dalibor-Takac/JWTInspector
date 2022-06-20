@@ -6,7 +6,20 @@
         xmlns:local="clr-namespace:JWTInspector.Models"
         mc:Ignorable="d"
         Title="JWT Inspector" Height="640" Width="480"
-        d:DataContext="{d:DesignInstance Type=local:TokenViewModel}" MinHeight="240" MinWidth="420">
+        d:DataContext="{d:DesignInstance Type=local:TokenViewModel}" MinHeight="240" MinWidth="420"
+        FocusManager.FocusedElement="{Binding ElementName=txtToken}">
+    <Window.Resources>
+        <SolidColorBrush x:Key="HeaderBorderColor" Color="#FF52E84E"/>
+        <SolidColorBrush x:Key="HeaderBackgroundColor" Color="#FFC6FBCC"/>
+        <SolidColorBrush x:Key="BodyBorderColor" Color="#FFDACACA"/>
+        <SolidColorBrush x:Key="BodyBackgroundColor" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="SignatureBorderColor" Color="#FFFF852F"/>
+        <SolidColorBrush x:Key="SignatureBackgroundColor" Color="#FFFFCCA8"/>
+        <SolidColorBrush x:Key="ErrorBorderColor" Color="Red"/>
+        <SolidColorBrush x:Key="ErrorText" Color="White"/>
+        <SolidColorBrush x:Key="ErrorBackgroundColor" Color="#FFFF7272"/>
+        <BitmapImage x:Key="TooltipExtraInfoImage" UriSource="pack://application:,,,/tag.png"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -14,54 +27,69 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
         <TextBlock Margin="16,10,10,10" TextWrapping="Wrap" Text="Token:"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="NoWrap" Text="" Margin="10,10,10,10" TextChanged="TextBox_TextChanged"/>
-        <ScrollViewer Grid.ColumnSpan="2" Grid.Row="2" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <TextBox x:Name="txtToken" Grid.Column="1" TextWrapping="NoWrap" Text="{Binding TokenString, UpdateSourceTrigger=PropertyChanged}" Margin="10,10,10,10"/>
+        <Button Grid.Column="2" Margin="10,10,10,10" Content="X" Click="Button_Click"/>
+        <ScrollViewer Grid.ColumnSpan="3" Grid.Row="1" Margin="10,10,10,10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel Orientation="Vertical">
-                <Border BorderThickness="1" BorderBrush="#FF52E84E" Background="#FF52E84E" Padding="10,0,0,0">
-                    <StackPanel Orientation="Vertical" Background="#FFC6FBCC">
-                        <TextBlock Text="{}{"/>
-                        <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&quot;typ&quot; : &quot;"/>
-                                <TextBlock Text="{Binding Token.Header.Kind}"/>
-                                <TextBlock Text="&quot;,"/>
+                <StackPanel Visibility="{Binding TokenString, Converter={local:ObjectToVisibilityConverter}}">
+                    <StackPanel Orientation="Vertical" Visibility="{Binding ErrorMessage, Converter={local:ObjectToVisibilityConverter NullValue=Visible, NonNullValue=Collapsed}}">
+                    <Border BorderThickness="1" BorderBrush="{StaticResource HeaderBorderColor}" Background="{StaticResource HeaderBorderColor}" Padding="10,0,0,0">
+                        <StackPanel Orientation="Vertical" Background="{StaticResource HeaderBackgroundColor}">
+                            <TextBlock Text="{}{"/>
+                            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&quot;typ&quot; : &quot;"/>
+                                    <TextBlock Text="{Binding Token.Header.Kind}"/>
+                                    <TextBlock Text="&quot;,"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&quot;alg&quot; : &quot;"/>
+                                    <TextBlock Text="{Binding Token.Header.Algorithm}"/>
+                                    <TextBlock Text="&quot;"/>
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&quot;alg&quot; : &quot;"/>
-                                <TextBlock Text="{Binding Token.Header.Algorithm}"/>
-                                <TextBlock Text="&quot;"/>
-                            </StackPanel>
+                            <TextBlock Text="{}}"/>
                         </StackPanel>
-                        <TextBlock Text="{}}"/>
+                    </Border>
+                    <Border BorderThickness="1" BorderBrush="{StaticResource BodyBorderColor}" Background="{StaticResource BodyBorderColor}" Padding="10,0,0,0" Margin="0,4,0,4">
+                        <StackPanel Orientation="Vertical" Background="{StaticResource BodyBackgroundColor}">
+                            <TextBlock Text="{}{"/>
+                            <ItemsControl ItemsSource="{Binding Token.Body}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                            <TextBlock Text="&quot;"/>
+                                            <TextBlock Text="{Binding Key}"/>
+                                            <TextBlock Text="&quot; : "/>
+                                            <TextBlock Text="{Binding Value}" ToolTip="{Binding ToolTip}" TextDecorations="{Binding ToolTip, Converter={local:ObjectToFontDecorationConverter}}"/>
+                                            <TextBlock Text=","/>
+                                            <Image Source="{StaticResource TooltipExtraInfoImage}" ToolTip="{Binding ToolTip}" Visibility="{Binding ToolTip, Converter={local:ObjectToVisibilityConverter}}" Stretch="None"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Text="{}}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="{StaticResource SignatureBorderColor}" Background="{StaticResource SignatureBorderColor}" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0" Background="{StaticResource SignatureBackgroundColor}">
+                            <TextBlock Text="Signature : "/>
+                            <TextBlock Text="{Binding Token.Signature}" ToolTip="{Binding Token.Signature}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                </StackPanel>
+                <Border BorderThickness="2" BorderBrush="{StaticResource ErrorBorderColor}" Visibility="{Binding ErrorMessage, Converter={local:ObjectToVisibilityConverter NullValue=Collapsed, NonNullValue=Visible}}">
+                    <StackPanel Orientation="Vertical" Background="{StaticResource ErrorBackgroundColor}">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorText}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="10,10,10,10"/>
                     </StackPanel>
                 </Border>
-                <Border BorderThickness="1" BorderBrush="#FFDACACA" Background="#FFDACACA" Padding="10,0,0,0" Margin="0,4,0,4">
-                    <StackPanel Orientation="Vertical" Background="#FFFFFFFF">
-                        <TextBlock Text="{}{"/>
-                        <ItemsControl ItemsSource="{Binding Token.Body}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                                        <TextBlock Text="&quot;"/>
-                                        <TextBlock Text="{Binding Key}"/>
-                                        <TextBlock Text="&quot; : "/>
-                                        <TextBlock Text="{Binding Value}" ToolTip="{Binding ToolTip}"/>
-                                        <TextBlock Text=","/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                        <TextBlock Text="{}}"/>
-                    </StackPanel>
-                </Border>
-                <Border BorderBrush="#FFFF852F" Background="#FFFF852F" BorderThickness="1">
-                    <StackPanel Orientation="Horizontal" Margin="10,0,0,0" Background="#FFFFCCA8">
-                        <TextBlock Text="Signature : "/>
-                        <TextBlock Text="{Binding Token.Signature}" ToolTip="{Binding Token.Signature}"/>
-                    </StackPanel>
+                <Border BorderBrush="{StaticResource HeaderBorderColor}" BorderThickness="2" Visibility="{Binding TokenString, Converter={local:ObjectToVisibilityConverter NullValue=Visible, NonNullValue=Collapsed}}">
+                    <TextBlock Text="Paste token in text box above to begin" Background="{StaticResource HeaderBackgroundColor}" TextAlignment="Center"/>
                 </Border>
             </StackPanel>
         </ScrollViewer>
