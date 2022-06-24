@@ -37,58 +37,79 @@
             <StackPanel Orientation="Vertical">
                 <StackPanel Visibility="{Binding TokenString, Converter={local:ObjectToVisibilityConverter}}">
                     <StackPanel Orientation="Vertical" Visibility="{Binding ErrorMessage, Converter={local:ObjectToVisibilityConverter NullValue=Visible, NonNullValue=Collapsed}}">
-                    <Border BorderThickness="1" BorderBrush="{StaticResource HeaderBorderColor}" Background="{StaticResource HeaderBorderColor}" Padding="10,0,0,0">
-                        <StackPanel Orientation="Vertical" Background="{StaticResource HeaderBackgroundColor}">
-                            <TextBlock Text="{}{"/>
-                            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="&quot;typ&quot; : &quot;"/>
-                                    <TextBlock Text="{Binding Token.Header.Kind}"/>
-                                    <TextBlock Text="&quot;,"/>
+                        <Border BorderThickness="1" BorderBrush="{StaticResource HeaderBorderColor}" Background="{StaticResource HeaderBorderColor}" Padding="10,0,0,0">
+                            <StackPanel Orientation="Vertical" Background="{StaticResource HeaderBackgroundColor}">
+                                <TextBlock Text="{}{"/>
+                                <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&quot;typ&quot; : &quot;"/>
+                                        <TextBlock Text="{Binding Token.Header.Kind}"/>
+                                        <TextBlock Text="&quot;,"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&quot;alg&quot; : &quot;"/>
+                                        <TextBlock Text="{Binding Token.Header.Algorithm}"/>
+                                        <TextBlock Text="&quot;"/>
+                                    </StackPanel>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="&quot;alg&quot; : &quot;"/>
-                                    <TextBlock Text="{Binding Token.Header.Algorithm}"/>
-                                    <TextBlock Text="&quot;"/>
-                                </StackPanel>
+                                <TextBlock Text="{}}"/>
                             </StackPanel>
-                            <TextBlock Text="{}}"/>
-                        </StackPanel>
-                    </Border>
-                    <Border BorderThickness="1" BorderBrush="{StaticResource BodyBorderColor}" Background="{StaticResource BodyBorderColor}" Padding="10,0,0,0" Margin="0,4,0,4">
-                        <StackPanel Orientation="Vertical" Background="{StaticResource BodyBackgroundColor}">
-                            <TextBlock Text="{}{"/>
-                            <ItemsControl ItemsSource="{Binding Token.Body}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                                            <TextBlock Text="&quot;"/>
-                                            <TextBlock Text="{Binding Key}"/>
-                                            <TextBlock Text="&quot; : "/>
-                                            <TextBlock Text="{Binding Value}" ToolTip="{Binding ToolTip}" TextDecorations="{Binding ToolTip, Converter={local:ObjectToFontDecorationConverter}}"/>
-                                            <TextBlock Text=","/>
-                                            <Image Source="{StaticResource TooltipExtraInfoImage}" ToolTip="{Binding ToolTip}" Visibility="{Binding ToolTip, Converter={local:ObjectToVisibilityConverter}}" Stretch="None"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <TextBlock Text="{}}"/>
-                        </StackPanel>
-                    </Border>
-                    <Border BorderBrush="{StaticResource SignatureBorderColor}" Background="{StaticResource SignatureBorderColor}" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0" Background="{StaticResource SignatureBackgroundColor}">
-                            <TextBlock Text="Signature : "/>
-                            <TextBlock Text="{Binding Token.Signature}" ToolTip="{Binding Token.Signature}"/>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                        </Border>
+                        <Border BorderThickness="1" BorderBrush="{StaticResource BodyBorderColor}" Background="{StaticResource BodyBorderColor}" Padding="10,0,0,0" Margin="0,4,0,4">
+                            <StackPanel Orientation="Vertical" Background="{StaticResource BodyBackgroundColor}">
+                                <TextBlock Text="{}{"/>
+                                <ItemsControl ItemsSource="{Binding Token.Body}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                                <TextBlock Text="&quot;"/>
+                                                <TextBlock Text="{Binding Key}"/>
+                                                <TextBlock Text="&quot; : "/>
+                                                <TextBlock Text="{Binding Value}" ToolTip="{Binding ToolTip}" TextDecorations="{Binding ToolTip, Converter={local:ObjectToFontDecorationConverter}}"/>
+                                                <TextBlock Text=","/>
+                                                <Image Source="{StaticResource TooltipExtraInfoImage}" ToolTip="{Binding ToolTip}" Visibility="{Binding ToolTip, Converter={local:ObjectToVisibilityConverter}}" Stretch="None"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <TextBlock Text="{}}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border BorderBrush="{StaticResource SignatureBorderColor}" Background="{StaticResource SignatureBorderColor}" BorderThickness="1">
+                            <StackPanel Orientation="Vertical" Background="{StaticResource SignatureBackgroundColor}" Margin="10,0,0,0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="20"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Signature : " VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Token.Signature}" VerticalAlignment="Center" Grid.Column="1"/>
+                                    <TextBlock Text="√" Grid.Column="2" Visibility="{Binding TokenValidSign}" Foreground="{StaticResource HeaderBorderColor}" FontSize="24"/>
+                                    <TextBlock Text="x" Grid.Column="2" Visibility="{Binding TokenInvalidSign}" Foreground="{StaticResource ErrorBorderColor}" FontSize="24"/>
+                                    <TextBlock Text="Verification key : " Grid.Row="1"/>
+                                    <TextBox Text="{Binding SignatureVerificationKey, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                    <CheckBox Content="Is key base64 encoded?" IsChecked="{Binding IsSignatureBase64Encoded}" Grid.Row="2" Grid.ColumnSpan="3"/>
+                                    <TextBlock Text="Key file : " Grid.Row="3"/>
+                                    <TextBlock Text="{Binding SignatureVerificationFile}" Grid.Row="3" Grid.Column="1"/>
+                                    <Button Content="..." Grid.Row="3" Grid.Column="3"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
                 </StackPanel>
                 <Border BorderThickness="2" BorderBrush="{StaticResource ErrorBorderColor}" Visibility="{Binding ErrorMessage, Converter={local:ObjectToVisibilityConverter NullValue=Collapsed, NonNullValue=Visible}}">
                     <StackPanel Orientation="Vertical" Background="{StaticResource ErrorBackgroundColor}">
                         <TextBlock TextWrapping="Wrap" Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorText}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="10,10,10,10"/>
                     </StackPanel>
                 </Border>
-                <Border BorderBrush="{StaticResource HeaderBorderColor}" BorderThickness="2" Visibility="{Binding TokenString, Converter={local:ObjectToVisibilityConverter NullValue=Visible, NonNullValue=Collapsed}}">
+                <Border BorderBrush="{StaticResource HeaderBorderColor}" BorderThickness="2" Visibility="{Binding InstrationText}">
                     <TextBlock Text="Paste token in text box above to begin" Background="{StaticResource HeaderBackgroundColor}" TextAlignment="Center"/>
                 </Border>
             </StackPanel>

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="icon.ico" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.20.0" />
     <Resource Include="tag.png" />
   </ItemGroup>
 

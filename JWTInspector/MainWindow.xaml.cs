@@ -1,4 +1,5 @@
 ﻿using JWTInspector.Models;
+using Microsoft.IdentityModel.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ public partial class MainWindow : Window
     private readonly TokenViewModel _tokenVM;
     public MainWindow()
     {
+        IdentityModelEventSource.ShowPII = true;
         _tokenVM = new TokenViewModel();
         InitializeComponent();
         DataContext = _tokenVM;
@@ -21,9 +23,7 @@ public partial class MainWindow : Window
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        _tokenVM.TokenString = null;
-        _tokenVM.ErrorMessage = null;
-        _tokenVM.Token = null;
+        _tokenVM.Clear();
         txtToken.Focus();
     }
 }
