@@ -34,10 +34,10 @@
                 <TextBlock Text="Key Verification" FontWeight="Bold" HorizontalAlignment="Center"/>
                 <TabControl TabStripPlacement="Left" Margin="4" SelectedIndex="{Binding SelectedKeySource}">
                     <TabItem HeaderTemplate="{StaticResource VerticalTabHeaders}" Header="Key Bytes" VerticalAlignment="Stretch">
-                        <cc:StringSecurityKeyView Margin="4"/>
+                        <cc:StringSecurityKeyView DataContext="{Binding VerificationKey}" Margin="4"/>
                     </TabItem>
                     <TabItem HeaderTemplate="{StaticResource VerticalTabHeaders}" Header="File">
-                        <cc:CertificateSecurityKeyView Margin="4"/>
+                        <cc:CertificateSecurityKeyView DataContext="{Binding VerificationKey}" Margin="4"/>
                     </TabItem>
                 </TabControl>
             </StackPanel>

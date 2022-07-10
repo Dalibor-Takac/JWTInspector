@@ -6,10 +6,13 @@
              xmlns:local="clr-namespace:JWTInspector.CustomControls"
              xmlns:vm="clr-namespace:JWTInspector.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="400"
+             d:DesignHeight="85" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance Type={x:Type vm:VerificationKeyCertificateModel}}">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -18,7 +21,11 @@
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
         <TextBlock Text="Selected certificate file: "/>
-        <TextBlock Text="{Binding CertificateFile}" Grid.Column="1"/>
-        <Button Content="..." Grid.Column="2"/>
+        <TextBlock Text="{Binding CertificateFile}" ToolTip="{Binding CertificateFile}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
+        <Button Content="..." Grid.Column="2" Click="Button_Click"/>
+        <TextBlock Text="Key kind: " Grid.Row="1"/>
+        <TextBlock Text="{Binding IncludedKeyKind}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <CheckBox IsEnabled="False" IsChecked="{Binding HasPrivatekey}" Content="Contains private key" Grid.Row="2" Grid.ColumnSpan="3"/>
+        <CheckBox IsEnabled="False" IsChecked="{Binding HasPublicKey}" Content="Contains public key" Grid.Row="3" Grid.ColumnSpan="3"/>
     </Grid>
 </UserControl>

@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using JWTInspector.Models;
+using Microsoft.Win32;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace JWTInspector.CustomControls;
 /// <summary>
@@ -22,5 +13,22 @@ public partial class CertificateSecurityKeyView : UserControl
     public CertificateSecurityKeyView()
     {
         InitializeComponent();
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        var openFiledDlg = new OpenFileDialog();
+        openFiledDlg.CheckFileExists = true;
+        openFiledDlg.CheckPathExists = true;
+        openFiledDlg.Filter = "Certificate|*.cer;*.crt;*.pfx|All files|*.*";
+        if (openFiledDlg.ShowDialog().GetValueOrDefault())
+        {
+            var model = ((VerificationKeyCertificateModel)DataContext);
+            model.CertificateFile = openFiledDlg.FileName;
+            var certificate = new X509Certificate2(openFiledDlg.FileName);
+            model.IncludedKeyKind = certificate.SignatureAlgorithm.FriendlyName;
+            model.HasPrivatekey = certificate.HasPrivateKey;
+            model.HasPublicKey = certificate.PublicKey is not null;
+        }
     }
 }

@@ -21,4 +21,24 @@ public partial class TokenViewModel : INotifyPropertyChanged
 
     [NotifyPropertyChange("SelectedKeySource")]
     private int _selectedkeySource;
+
+    public TokenViewModel()
+    {
+        PropertyChanged += TokenViewModel_PropertyChanged;
+    }
+
+    private void TokenViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Token))
+        {
+
+        }
+        else if (e.PropertyName == nameof(SelectedKeySource))
+        {
+            if (SelectedKeySource == 0)
+                VerificationKey = new VerificationKeyBase64EncodedModel();
+            else
+                VerificationKey = new VerificationKeyCertificateModel();
+        }
+    }
 }
