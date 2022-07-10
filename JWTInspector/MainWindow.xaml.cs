@@ -20,10 +20,4 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = _tokenVM;
     }
-
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-        _tokenVM.Clear();
-        txtToken.Focus();
-    }
 }

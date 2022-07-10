@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <None Remove="icon.ico" />
-    <None Remove="tag.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +20,10 @@
   <ItemGroup>
     <EmbeddedResource Include="icon.ico" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.20.0" />
-    <Resource Include="tag.png" />
+  </ItemGroup>
+	
+  <ItemGroup>
+	  <ProjectReference Include="..\NotifyPropertyChangeSourceGenerator\NotifyPropertyChangeSourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
   </ItemGroup>
 
 </Project>

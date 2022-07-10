@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace JWTInspector.Models;
+namespace JWTInspector.Converters;
 
 [ValueConversion(typeof(object), typeof(Visibility))]
 public class ObjectToVisibilityConverter : MarkupExtension, IValueConverter
@@ -15,7 +15,7 @@ public class ObjectToVisibilityConverter : MarkupExtension, IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (!typeof(Visibility).IsAssignableFrom(targetType))
-            throw new NotSupportedException("Converter can't be used to convert to isntances of type otehr than Visibility");
+            throw new NotSupportedException("Converter can't be used to convert to intances of type other than Visibility");
         return value == null ? NullValue : NonNullValue;
     }
 
