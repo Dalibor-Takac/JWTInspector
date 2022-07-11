@@ -6,14 +6,14 @@
              xmlns:local="clr-namespace:JWTInspector.CustomControls"
              xmlns:conv="clr-namespace:JWTInspector.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="150">
+             d:DesignHeight="40" d:DesignWidth="150" GotFocus="UserControl_GotFocus">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <TextBox Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:TextBoxWithPlaceholderAndClear}}}"
-                 Grid.ColumnSpan="2" VerticalContentAlignment="Center"/>
+        <TextBox Name="txtText" Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:TextBoxWithPlaceholderAndClear}}}"
+                 Grid.ColumnSpan="2" VerticalContentAlignment="Center" Padding="10,0,0,0"/>
         <TextBlock Text="{Binding PlaceholderText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:TextBoxWithPlaceholderAndClear}}}"
                    FontStyle="Italic" VerticalAlignment="Center" Margin="10,0,0,0" IsHitTestVisible="False"
                    Visibility="{Binding InputText, Converter={conv:ObjectToVisibilityConverter NonNullValue=Collapsed, NullValue=Visible}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:TextBoxWithPlaceholderAndClear}}}"
