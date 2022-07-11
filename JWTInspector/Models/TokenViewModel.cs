@@ -47,12 +47,12 @@ public partial class TokenViewModel : INotifyPropertyChanged
             if (SelectedKeySource == 0)
             {
                 VerificationKey = new VerificationKeyBase64EncodedModel();
-                VerificationKey.PropertyChanged += VerificationKey_PropertyChanged;
+                VerificationKey.SubscribeToChanges(VerificationKey_PropertyChanged);
             }
             else
             {
                 VerificationKey = new VerificationKeyCertificateModel();
-                VerificationKey.PropertyChanged += VerificationKey_PropertyChanged;
+                VerificationKey.SubscribeToChanges(VerificationKey_PropertyChanged);
             }
         }
     }

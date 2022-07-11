@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <local:TextBoxWithPlaceholderAndClear InputText="{Binding Base64EncodedKey}" PlaceholderText="Paste symetric security key here"/>
-        <CheckBox Content="Key is base64 encoded" IsChecked="{Binding IsBase64Encoded}" Grid.Row="1"/>
+        <local:TextBoxWithPlaceholderAndClear InputText="{Binding EncodedKey}" PlaceholderText="Paste symetric security key here"/>
+        <CheckBox Content="Key is base64 encoded" IsChecked="{Binding IsBase64Encoded}" ToolTip="Otherwise key will be set to utf-8 bytes" Grid.Row="1"/>
     </Grid>
 </UserControl>

@@ -11,7 +11,7 @@ namespace NotifyPropertyChangeSourceGenerator
         public string Namespace { get; set; }
         public IEnumerable<AutoImplementFieldDescriptor> AutoImplementFields { get; set; }
         public IEnumerable<string> ClassUsings { get; set; }
-        public bool NeedsProtectedEventTrigerMethod { get; set; }
+        public bool NeedsEventTriggerMethod { get; set; }
     }
 
     public class AutoImplementFieldDescriptor

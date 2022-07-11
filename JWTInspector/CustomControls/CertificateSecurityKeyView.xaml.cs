@@ -26,7 +26,7 @@ public partial class CertificateSecurityKeyView : UserControl
             var model = ((VerificationKeyCertificateModel)DataContext);
             model.CertificateFile = openFiledDlg.FileName;
             var certificate = new X509Certificate2(openFiledDlg.FileName);
-            model.IncludedKeyKind = certificate.SignatureAlgorithm.FriendlyName;
+            model.IncludedKeyKind = certificate.PublicKey.Oid.FriendlyName;
             model.HasPrivatekey = certificate.HasPrivateKey;
             model.HasPublicKey = certificate.PublicKey is not null;
         }

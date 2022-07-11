@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JWTInspector.CustomControls"
+             xmlns:c="clr-namespace:JWTInspector.Converters"
              xmlns:vm="clr-namespace:JWTInspector.Models"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300"
@@ -63,7 +64,7 @@
                 <TextBlock Text="&quot;typ&quot; : " Grid.Row="1" Margin="10,0,0,0"/>
                 <TextBlock Text="{Binding Token.Header.Kind}" Grid.Row="1" Grid.Column="1" Margin="10,0,0,0"/>
                 <TextBlock Text="&quot;alg&quot; : " Grid.Row="2" Margin="10,0,0,0"/>
-                <TextBlock Text="{Binding Token.Header.Algorithm}" Grid.Row="2" Grid.Column="2" Margin="10,0,0,0"/>
+                <TextBlock Text="{Binding Token.Header.Algorithm}" ToolTip="{Binding Token.Header.Algorithm, Converter={c:TokenSignatureAlgorithmToolTipConverter}}" Grid.Row="2" Grid.Column="2" Margin="10,0,0,0"/>
                 <TextBlock Text="{}}" Grid.Row="3"/>
             </Grid>
         </Border>
@@ -83,7 +84,7 @@
                                     <TextBlock Text="&quot;" Margin="10,0,0,0"/>
                                     <TextBlock Text="{Binding ClaimType}"/>
                                     <TextBlock Text="&quot; :"/>
-                                    <TextBlock Text="{Binding ClaimValue}"/>
+                                    <TextBlock Text="{Binding ClaimValue}" ToolTip="{Binding ToolTip}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

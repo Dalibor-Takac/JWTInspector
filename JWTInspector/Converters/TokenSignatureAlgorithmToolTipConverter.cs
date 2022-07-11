@@ -17,8 +17,8 @@ public class TokenSignatureAlgorithmToolTipConverter : MarkupExtension, IValueCo
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (targetType != typeof(string))
-            throw new NotSupportedException("Converter can't be used to convert to intances of type other than Visibility");
+        if (targetType != typeof(string) && targetType != typeof(object))
+            throw new NotSupportedException("Converter can't be used to convert to intances of type other than string or object");
 
         if (value is not TokenSignatureAlgorithm)
             throw new NotSupportedException("Converter can't be used to convert from anything else but instance of TokenSignatureAlgorithm");

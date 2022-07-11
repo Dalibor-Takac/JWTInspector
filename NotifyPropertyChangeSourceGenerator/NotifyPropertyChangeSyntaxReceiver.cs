@@ -20,12 +20,12 @@ namespace NotifyPropertyChangeSourceGenerator
                 if (cd == null)
                     return;
 
+                var classModel = context.SemanticModel.GetDeclaredSymbol(cd);
+                if (classModel == null)
+                    return;
+
                 if (cd.BaseList != null && cd.Modifiers.Any(x => x.Text == "partial"))
                 {
-                    var classModel = context.SemanticModel.GetDeclaredSymbol(cd);
-                    if (classModel == null)
-                        return;
-
                     if (classModel.AllInterfaces.Contains(inpcInterface, SymbolEqualityComparer.Default))
                     {
                         var autoClass = new AutoImplementClassDescriptor()
@@ -33,7 +33,7 @@ namespace NotifyPropertyChangeSourceGenerator
                             ClassName = classModel.Name,
                             Namespace = classModel.ContainingNamespace.ToDisplayString(),
                             ClassModifiers = cd.Modifiers.ToString(),
-                            NeedsProtectedEventTrigerMethod = cd.BaseList.Types.Any(IsINPCInterface)
+                            NeedsEventTriggerMethod = ClassGeneratesEventAndEventTriggerMethod(classModel, inpcInterface)
                         };
 
                         var fieldMembers = classModel.GetMembers()
@@ -52,11 +52,9 @@ namespace NotifyPropertyChangeSourceGenerator
             }
         }
 
-        private static bool IsINPCInterface(BaseTypeSyntax syntaxToCheck)
+        private bool ClassGeneratesEventAndEventTriggerMethod(INamedTypeSymbol classModel, INamedTypeSymbol inpcInterface)
         {
-            if (!syntaxToCheck.IsKind(SyntaxKind.SimpleBaseType))
-                return false;
-            return syntaxToCheck.ToString().Contains(nameof(INotifyPropertyChanged));
+            return classModel.Interfaces.Contains(inpcInterface, SymbolEqualityComparer.Default);
         }
 
         private static string GetAnnotatedPropertyName(IFieldSymbol field)

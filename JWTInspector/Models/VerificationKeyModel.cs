@@ -1,10 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace JWTInspector.Models;
-public partial class VerificationKeyModel : INotifyPropertyChanged
+public abstract class VerificationKeyModel
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    [NotifyPropertyChange("KeyKind")]
-    private string _keyKind;
+    public abstract bool IsJwtSignatureSupported(TokenSignatureAlgorithm alg);
+    public abstract (SignatureState state, string error) VerifySignature(string token, TokenSignatureAlgorithm alg);
+    public abstract void SubscribeToChanges(PropertyChangedEventHandler callback);
 }

@@ -35,13 +35,14 @@ namespace NotifyPropertyChangeSourceGenerator
                 additionalSource.AppendFormat("\t{0} class {1}\n", cls.ClassModifiers, cls.ClassName);
                 additionalSource.AppendLine("\t{");
 
-                if (cls.NeedsProtectedEventTrigerMethod)
+                if (cls.NeedsEventTriggerMethod)
                 {
-                    additionalSource.AppendFormat("\t\tprotected void OnPropertyChanged(string propertyName)\n");
+                    additionalSource.AppendFormat("\t\tprivate void OnPropertyChanged(string propertyName)\n");
                     additionalSource.AppendLine("\t\t{");
                     additionalSource.AppendFormat("\t\t\tPropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));\n");
                     additionalSource.AppendLine("\t\t}");
                 }
+
                 if (cls.AutoImplementFields != null)
                 {
                     foreach (var prop in cls.AutoImplementFields)
