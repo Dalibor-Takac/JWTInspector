@@ -23,7 +23,7 @@ public partial class CertificateSecurityKeyView : UserControl
         var openFiledDlg = new OpenFileDialog();
         openFiledDlg.CheckFileExists = true;
         openFiledDlg.CheckPathExists = true;
-        openFiledDlg.Filter = "Certificate|*.cer;*.crt;*.pfx|PEM files|*.pem|All files|*.*";
+        openFiledDlg.Filter = "Certificate|*.cer;*.crt|PEM files|*.pem|All files|*.*";
         if (openFiledDlg.ShowDialog().GetValueOrDefault())
         {
             model.CertificateFile = openFiledDlg.FileName;
