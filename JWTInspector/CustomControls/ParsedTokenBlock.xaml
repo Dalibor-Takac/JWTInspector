@@ -8,7 +8,7 @@
              xmlns:vm="clr-namespace:JWTInspector.Models"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance Type={x:Type vm:TokenViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type vm:JWTToken}}">
     <UserControl.Resources>
         <SolidColorBrush x:Key="HeaderBorderColor" Color="#FF52E84E"/>
         <SolidColorBrush x:Key="HeaderBackgroundColor" Color="#FFC6FBCC"/>
@@ -19,24 +19,30 @@
         <SolidColorBrush x:Key="ErrorBorderColor" Color="Red"/>
         <SolidColorBrush x:Key="ErrorText" Color="White"/>
         <SolidColorBrush x:Key="ErrorBackgroundColor" Color="#FFFF7272"/>
+        <SolidColorBrush x:Key="SignatureUnknown" Color="#FFFF5818"/>
+        <SolidColorBrush x:Key="SignatureValid" Color="#FF08731D"/>
+        <SolidColorBrush x:Key="SignatureInvalid" Color="#FFB91616"/>
         <Style TargetType="TextBlock" x:Key="SignatureVerificationSign">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=SignatureState}" Value="{x:Static vm:SignatureState.Unknown}">
+                <DataTrigger Binding="{Binding Path=Signature.SignatureState}" Value="{x:Static vm:SignatureState.Unknown}">
                     <DataTrigger.Setters>
-                        <Setter Property="Foreground" Value="{StaticResource SignatureBorderColor}"/>
-                        <Setter Property="Text" Value="&#xE0B9;"/>
+                        <Setter Property="Foreground" Value="{StaticResource SignatureUnknown}"/>
+                        <Setter Property="Text" Value="?"/>
+                        <Setter Property="ToolTip" Value="Signature has not been checked"/>
                     </DataTrigger.Setters>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=SignatureState}" Value="{x:Static vm:SignatureState.Invalid}">
+                <DataTrigger Binding="{Binding Path=Signature.SignatureState}" Value="{x:Static vm:SignatureState.Invalid}">
                     <DataTrigger.Setters>
-                        <Setter Property="Foreground" Value="{StaticResource ErrorBorderColor}"/>
-                        <Setter Property="Text" Value="&#xE0D9;"/>
+                        <Setter Property="Foreground" Value="{StaticResource SignatureInvalid}"/>
+                        <Setter Property="Text" Value="&#xE10A;"/>
+                        <Setter Property="ToolTip" Value="Signature is not valid"/>
                     </DataTrigger.Setters>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Path=SignatureState}" Value="{x:Static vm:SignatureState.Valid}">
+                <DataTrigger Binding="{Binding Path=Signature.SignatureState}" Value="{x:Static vm:SignatureState.Valid}">
                     <DataTrigger.Setters>
-                        <Setter Property="Foreground" Value="{StaticResource HeaderBorderColor}"/>
-                        <Setter Property="Text" Value="&#xE0E7;"/>
+                        <Setter Property="Foreground" Value="{StaticResource SignatureValid}"/>
+                        <Setter Property="Text" Value="&#xE10B;"/>
+                        <Setter Property="ToolTip" Value="Signature is valid"/>
                     </DataTrigger.Setters>
                 </DataTrigger>
             </Style.Triggers>
@@ -62,9 +68,9 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{}{"/>
                 <TextBlock Text="&quot;typ&quot; : " Grid.Row="1" Margin="10,0,0,0"/>
-                <TextBlock Text="{Binding Token.Header.Kind}" Grid.Row="1" Grid.Column="1" Margin="10,0,0,0"/>
+                <TextBlock Text="{Binding Header.Kind}" Grid.Row="1" Grid.Column="1" Margin="10,0,0,0"/>
                 <TextBlock Text="&quot;alg&quot; : " Grid.Row="2" Margin="10,0,0,0"/>
-                <TextBlock Text="{Binding Token.Header.Algorithm}" ToolTip="{Binding Token.Header.Algorithm, Converter={c:TokenSignatureAlgorithmToolTipConverter}}" Grid.Row="2" Grid.Column="2" Margin="10,0,0,0"/>
+                <TextBlock Text="{Binding Header.Algorithm}" ToolTip="{Binding Header.Algorithm, Converter={c:TokenSignatureAlgorithmToolTipConverter}}" Grid.Row="2" Grid.Column="2" Margin="10,0,0,0"/>
                 <TextBlock Text="{}}" Grid.Row="3"/>
             </Grid>
         </Border>
@@ -77,7 +83,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{}{"/>
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Token.Body}">
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Body}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -94,13 +100,13 @@
             </ScrollViewer>
         </Border>
         <Border Background="{StaticResource SignatureBorderColor}" BorderThickness="1" Padding="1" Grid.Row="2">
-            <Grid Background="{StaticResource SignatureBackgroundColor}">
+            <Grid Background="{StaticResource SignatureBackgroundColor}" Margin="10,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Token.Signature.Signature}"/>
-                <TextBlock Style="{StaticResource SignatureVerificationSign}" FontFamily="Segoe UI Symbol" Foreground="{StaticResource HeaderBorderColor}" Grid.Column="1"/>
+                <TextBlock Style="{StaticResource SignatureVerificationSign}" FontFamily="Segoe UI Symbol" FontSize="16" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Signature.Signature}" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center"/>
             </Grid>
         </Border>
     </Grid>

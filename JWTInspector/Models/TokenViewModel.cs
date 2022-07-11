@@ -25,8 +25,13 @@ public partial class TokenViewModel : INotifyPropertyChanged
     [NotifyPropertyChange("ErrorMessage")]
     private string? _errorMessage;
 
+    [NotifyPropertyChange("SignatureError")]
+    private string? _signatureError;
+
     public TokenViewModel()
     {
+        VerificationKey = new VerificationKeyBase64EncodedModel();
+        VerificationKey.SubscribeToChanges(VerificationKey_PropertyChanged);
         PropertyChanged += TokenViewModel_PropertyChanged;
     }
 
@@ -59,6 +64,13 @@ public partial class TokenViewModel : INotifyPropertyChanged
 
     private void VerificationKey_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        // TODO verify signature here
+        if (Token is not null)
+        {
+            if (VerificationKey.IsJwtSignatureSupported(Token.Header.Algorithm))
+            {
+                (var checkedSignature, SignatureError) = VerificationKey.VerifySignature(TokenText, Token.Header.Algorithm);
+                Token = new JWTToken(Token.Header, Token.Body, new JWTSignature(Token.Signature.Signature, checkedSignature));
+            }
+        }
     }
 }

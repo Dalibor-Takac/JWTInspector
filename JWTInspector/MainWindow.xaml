@@ -29,13 +29,17 @@
             <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <cc:TextBoxWithPlaceholderAndClear x:Name="txtToken" InputText="{Binding TokenText}" PlaceholderText="Enter token here to parse and validate..." Margin="4"/>
-        <cc:ParsedTokenBlock Grid.Row="1"/>
-        <Border BorderThickness="2" Background="{StaticResource ErrorBackground}" BorderBrush="{StaticResource ErrorBorder}" Grid.Row="1" Visibility="{Binding ErrorMessage, Converter={c:ObjectToVisibilityConverter NullValue=Collapsed, NonNullValue=Visible}}">
+        <cc:ParsedTokenBlock Grid.Row="1" DataContext="{Binding Token}"/>
+        <Border BorderThickness="1" Background="{StaticResource ErrorBackground}" BorderBrush="{StaticResource ErrorBorder}" Grid.Row="1" Visibility="{Binding ErrorMessage, Converter={c:ObjectToVisibilityConverter NullValue=Collapsed, NonNullValue=Visible}}">
             <TextBlock Text="{Binding ErrorMessage}" Margin="10" Foreground="{StaticResource ErrorBorder}" TextAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" TextWrapping="Wrap" />
         </Border>
-        <Border Grid.Row="2" Background="{StaticResource KeyVerificationBackground}" BorderBrush="{StaticResource KeyVerificationBackground}" BorderThickness="1">
+        <Border BorderThickness="2" Background="{StaticResource ErrorBackground}" BorderBrush="{StaticResource ErrorBorder}" Grid.Row="2" Visibility="{Binding SignatureError, Converter={c:ObjectToVisibilityConverter NullValue=Collapsed, NonNullValue=Collapsed}}">
+            <TextBlock Text="{Binding SignatureError}" Margin="10" Foreground="{StaticResource ErrorBorder}" TextAlignment="Center" TextWrapping="Wrap"/>
+        </Border>
+        <Border Grid.Row="3" Background="{StaticResource KeyVerificationBackground}" BorderBrush="{StaticResource KeyVerificationBackground}" BorderThickness="1">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="Key Verification" FontWeight="Bold" HorizontalAlignment="Center"/>
                 <TabControl TabStripPlacement="Left" Margin="4" SelectedIndex="{Binding SelectedKeySource}">
