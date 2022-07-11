@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace JWTInspector.Models;
 public partial class TokenViewModel : INotifyPropertyChanged
@@ -40,7 +35,14 @@ public partial class TokenViewModel : INotifyPropertyChanged
         if (e.PropertyName == nameof(TokenText))
         {
             if (TokenText is not null)
+            {
                 (ErrorMessage, Token) = JWTToken.Parse(TokenText);
+                if (Token is not null && VerificationKey.IsJwtSignatureSupported(Token.Header.Algorithm))
+                {
+                    (var checkedSignature, SignatureError) = VerificationKey.VerifySignature(TokenText, Token.Header.Algorithm);
+                    Token = new JWTToken(Token.Header, Token.Body, new JWTSignature(Token.Signature.Signature, checkedSignature));
+                }
+            }
             else
             {
                 Token = null;
