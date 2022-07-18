@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JWTInspector2.Views.TokenView"
+             xmlns:vm="clr-namespace:JWTInspector2.ViewModels"
+             x:DataType="vm:TokenViewModel">
+    <Border Padding="4">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="10"/>
+        </Border.StrokeShape>
+        <VerticalStackLayout>
+            <Label Text="{}{"/>
+            <VerticalStackLayout Margin="10,0,0,0">
+                <HorizontalStackLayout>
+                    <Label Text="typ : "/>
+                    <Label Text="{Binding TokenType}"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="alg : "/>
+                    <Label Text="{Binding TokenSignatureAlgorithm}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <Label Text="{}},"/>
+            <Label Text="{}{"/>
+            <ListView ItemsSource="{Binding Body}"
+                      SelectionMode="None"
+                      HasUnevenRows="True"
+                      SeparatorVisibility="None"
+                      Margin="10,0,0,0">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:TokenClaim">
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding ClaimName}"/>
+                                <Label Text=" : " Grid.Column="1"/>
+                                <Label Text="{Binding ClaimValue}" Grid.Column="2"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Label Text="{}}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="{Binding SignatureValue}"/>
+                <Image IsVisible="{Binding IsSignatureValid}"
+                       Grid.Column="1"
+                       Aspect="Center"
+                       MinimumHeightRequest="32"
+                       MinimumWidthRequest="32">
+                    <Image.Source>
+                        <FontImageSource FontFamily="ionicons" Glyph="&#xf31d;" Size="26" Color="{StaticResource SignatureValid}"/>
+                    </Image.Source>
+                </Image>
+                <Image IsVisible="{Binding IsSignatureInvalid}"
+                       Grid.Column="1"
+                       Aspect="Center"
+                       MinimumHeightRequest="32"
+                       MinimumWidthRequest="32">
+                    <Image.Source>
+                        <FontImageSource FontFamily="ionicons" Glyph="&#xf39e;" Size="26" Color="{StaticResource SignatureInvalid}"/>
+                    </Image.Source>
+                </Image>
+                <Image IsVisible="{Binding IsSignatureUnchecked}"
+                       Grid.Column="1"
+                       Aspect="Center"
+                       MinimumHeightRequest="32"
+                       MinimumWidthRequest="32">
+                    <Image.Source>
+                        <FontImageSource FontFamily="ionicons" Glyph="&#xf30b;" Size="26" Color="{StaticResource SignatureUnchecked}"/>
+                    </Image.Source>
+                </Image>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+</ContentView>
