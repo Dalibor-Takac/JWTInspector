@@ -10,7 +10,11 @@
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="4"/>
             </Border.StrokeShape>
-            <Label LineBreakMode="WordWrap" Text="{Binding ErrorMessage}" TextColor="Red"/>
+            <Label LineBreakMode="WordWrap"
+                   Text="{Binding ErrorMessage}"
+                   HorizontalTextAlignment="Justify"
+                   TextColor="Red"
+                   FontAttributes="Bold"/>
         </Border>
         <Border Padding="4" Margin="0,0,0,4">
             <Border.StrokeShape>
@@ -19,12 +23,12 @@
             <VerticalStackLayout>
                 <Label Text="Header"/>
                 <Label Text="{}{"/>
-                <CollectionView ItemsSource="{Binding TokenHeader}">
+                <CollectionView ItemsSource="{Binding TokenHeader}" Margin="16,0,0,0">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:KeyValueWithTooltipViewModel">
                             <HorizontalStackLayout ToolTipProperties.Text="{Binding Tooltip}">
                                 <Label Text="{Binding Key}"/>
-                                <Label Text=" : "/>
+                                <Label Text=":" Margin="4,0"/>
                                 <Label Text="{Binding Value}"/>
                             </HorizontalStackLayout>
                         </DataTemplate>
@@ -40,12 +44,12 @@
             <VerticalStackLayout>
                 <Label Text="Content"/>
                 <Label Text="{}{"/>
-                <CollectionView ItemsSource="{Binding TokenContent}">
+                <CollectionView ItemsSource="{Binding TokenContent}" Margin="16,0,0,0">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:KeyValueWithTooltipViewModel">
                             <HorizontalStackLayout ToolTipProperties.Text="{Binding Tooltip}">
                                 <Label Text="{Binding Key}"/>
-                                <Label Text=" : "/>
+                                <Label Text=":" Margin="4,0"/>
                                 <Label Text="{Binding Value}"/>
                             </HorizontalStackLayout>
                         </DataTemplate>

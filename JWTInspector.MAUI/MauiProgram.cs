@@ -1,5 +1,7 @@
 ﻿using JWTInspector.MAUI.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JWTInspector.MAUI;
 public static class MauiProgram
@@ -16,7 +18,8 @@ public static class MauiProgram
             })
             .Services
                 .AddTransient<ITokenProvider, TokenProvider>()
-                .AddTransient<ITokenVerificationKeyProvider, TokenVerificationKeyProvider>();
+                .AddTransient<ITokenVerificationKeyProvider, TokenVerificationKeyProvider>()
+                .AddTransient<JsonWebTokenHandler>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

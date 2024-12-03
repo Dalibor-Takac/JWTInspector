@@ -41,6 +41,29 @@ public class TokenViewModel : BaseViewModel
 		get { return !string.IsNullOrEmpty(_errorMessage); }
 	}
 
+	public void Reset()
+	{
+		ErrorMessage = null;
+		TokenHeader.Clear();
+		TokenContent.Clear();
+        VerificationStatus = TokenVerificationStatus.Unverified;
+	}
+
+	public void AddHeaderEntry(string key, string value, string? tooltip)
+	{
+		if (!string.IsNullOrEmpty(value))
+			TokenHeader.Add(new KeyValueWithTooltipViewModel() { Key = key, Value = value, Tooltip = tooltip });
+	}
+
+	public void AddContentEntry(string key, string value, string? tooltip)
+	{
+		AddContentEntry(key, val => !string.IsNullOrEmpty(val), _ => value, _ => tooltip, value);
+    }
+
+	public void AddContentEntry<T>(string key, Predicate<T> isDefined, Func<T, string> valueFormatter, Func<T, string?> tooltipFormatter, T value)	{
+		if (isDefined(value))
+			TokenContent.Add(new KeyValueWithTooltipViewModel() { Key = key, Value = valueFormatter(value), Tooltip = tooltipFormatter(value) });
+	}
 }
 
 public enum TokenVerificationStatus
