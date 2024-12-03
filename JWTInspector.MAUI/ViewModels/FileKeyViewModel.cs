@@ -9,4 +9,12 @@ public class FileKeyViewModel : BaseViewModel
 		get { return _filePath; }
 		set { _filePath = value; RaisePropertyChanged(); }
 	}
+
+	private string _fileDecriptionPassword = string.Empty;
+
+	public string FileDecriptionPassword
+	{
+		get { return _fileDecriptionPassword; }
+		set { _fileDecriptionPassword = value; RaisePropertyChanged(); }
+	}
 }

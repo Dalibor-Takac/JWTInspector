@@ -25,12 +25,14 @@ public partial class MainPage : ContentPage
         _vm.KeyViewModel.Characters.PropertyChanged += (sender, evt) =>
         {
             var key = _keyProvider.GetSecurityKey(_vm.KeyViewModel, KeySource.Characters);
-            _tokenProvider.ValidateToken(_vm.Token, key, _vm.TokenView);
+            if (key is not null && !string.IsNullOrEmpty(_vm.Token))
+                _tokenProvider.ValidateToken(_vm.Token, key, _vm.TokenView);
         };
         _vm.KeyViewModel.File.PropertyChanged += (sender, evt) =>
         {
             var key = _keyProvider.GetSecurityKey(_vm.KeyViewModel, KeySource.File);
-            _tokenProvider.ValidateToken(_vm.Token, key, _vm.TokenView);
+            if (key is not null && !string.IsNullOrEmpty(_vm.Token))
+                _tokenProvider.ValidateToken(_vm.Token, key, _vm.TokenView);
         };
 
         InitializeComponent();
