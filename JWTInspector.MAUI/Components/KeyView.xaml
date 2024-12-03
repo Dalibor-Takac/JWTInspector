@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:JWTInspector.MAUI.ViewModels"
+             x:Class="JWTInspector.MAUI.Components.KeyView"
+             x:DataType="vm:TokenKeyViewModel">
+    <Grid Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Picker Title="Key source" ItemsSource="{Binding AllSources}" SelectedItem="{Binding SelectedKey}"/>
+        <VerticalStackLayout Grid.Row="1" IsVisible="{Binding IsCharactersSelected}">
+            <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Key characters:"
+                       Margin="4"
+                       VerticalOptions="Center"/>
+                <Entry Text="{Binding Characters.KeyCharacters}"
+                       Grid.Column="1"
+                       HorizontalOptions="Fill"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Key is base64 encoded:"
+                       Margin="4"
+                       VerticalOptions="Center"/>
+                <CheckBox IsChecked="{Binding Characters.IsBase64Encoded}"
+                          Grid.Column="1"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Key is URL encoded"
+                       Margin="4"
+                       VerticalOptions="Center"/>
+                <CheckBox IsChecked="{Binding Characters.IsUrlEncoded}"
+                           Grid.Column="1"
+                          Margin="4"/>
+            </Grid>
+        </VerticalStackLayout>
+        <Grid Grid.Row="1" IsVisible="{Binding IsFileSelected}" Margin="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Text="Selected:" VerticalOptions="Center"/>
+            <Border Grid.Column="1" Margin="4,0" Padding="4">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="4"/>
+                </Border.StrokeShape>
+                <Label Text="{Binding File.FilePath}" VerticalOptions="Center"/>
+            </Border>
+            <Button Text="..." Grid.Column="2" Clicked="ChooseFileButton_Clicked" VerticalOptions="Center"/>
+        </Grid>
+    </Grid>
+</ContentView>

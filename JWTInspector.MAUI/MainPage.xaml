@@ -1,6 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="JWTInspector.MAUI.MainPage">
-
+             xmlns:vm="clr-namespace:JWTInspector.MAUI.ViewModels"
+             xmlns:v="clr-namespace:JWTInspector.MAUI.Components"
+             x:Class="JWTInspector.MAUI.MainPage"
+             x:DataType="vm:MainPageViewModel"
+             Shell.NavBarIsVisible="False">
+    <Grid Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Entry Text="{Binding Token}" Placeholder="Enter token here..." Margin="0,0,0,4"/>
+        <ScrollView Grid.Row="1"
+                    HorizontalScrollBarVisibility="Never"
+                    VerticalScrollBarVisibility="Default">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <v:TokenView BindingContext="{Binding TokenView}"/>
+                <v:KeyView BindingContext="{Binding KeyViewModel}" Grid.Row="1"/>
+            </Grid>
+        </ScrollView>
+    </Grid>
 </ContentPage>

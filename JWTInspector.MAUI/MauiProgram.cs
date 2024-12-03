@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using JWTInspector.MAUI.Services;
+using Microsoft.Extensions.Logging;
 
 namespace JWTInspector.MAUI;
 public static class MauiProgram
@@ -12,7 +13,10 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
+            })
+            .Services
+                .AddTransient<ITokenProvider, TokenProvider>()
+                .AddTransient<ITokenVerificationKeyProvider, TokenVerificationKeyProvider>();
 
 #if DEBUG
 		builder.Logging.AddDebug();
