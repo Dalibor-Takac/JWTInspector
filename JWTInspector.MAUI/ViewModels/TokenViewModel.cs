@@ -25,8 +25,15 @@ public class TokenViewModel : BaseViewModel
 	public TokenVerificationStatus VerificationStatus
 	{
 		get { return _verificationStatus; }
-		set { _verificationStatus = value; RaisePropertyChanged(); }
+		set { _verificationStatus = value; RaisePropertyChanged(); RaisePropertyChanged(nameof(VerificationStatusColor)); }
 	}
+
+	public Color VerificationStatusColor => _verificationStatus switch
+	{
+		TokenVerificationStatus.Invalid => Colors.Red,
+		TokenVerificationStatus.Valid => Colors.Green,
+		_ => Colors.Gray
+	};
 
 	private string? _errorMessage;
 

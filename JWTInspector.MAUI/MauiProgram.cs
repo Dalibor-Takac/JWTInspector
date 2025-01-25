@@ -1,6 +1,7 @@
 ﻿using JWTInspector.MAUI.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JWTInspector.MAUI;
@@ -24,6 +25,8 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+        IdentityModelEventSource.ShowPII = true;
+        IdentityModelEventSource.LogCompleteSecurityArtifact = true;
 
         return builder.Build();
     }

@@ -32,4 +32,25 @@ public class TokenKeyViewModel : BaseViewModel
 	public bool IsFileSelected => _selectedKey == KeySource.File;
 
 	public IEnumerable<KeySource> AllSources => [KeySource.Characters, KeySource.File];
+
+    private string? _keyErrorMessage;
+
+    public string? KeyErrorMessage
+    {
+        get { return _keyErrorMessage; }
+        set { _keyErrorMessage = value; RaisePropertyChanged(); RaisePropertyChanged(nameof(IsKeyError)); }
+    }
+
+    public bool IsKeyError => !string.IsNullOrEmpty(_keyErrorMessage);
+
+    public void Reset()
+    {
+		Characters.KeyCharacters = string.Empty;
+		Characters.IsBase64Encoded = Characters.IsUrlEncoded = false;
+
+		File.FilePath = string.Empty;
+		File.FileDecriptionPassword = string.Empty;
+
+		KeyErrorMessage = null;
+    }
 }

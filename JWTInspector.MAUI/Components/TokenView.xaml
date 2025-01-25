@@ -12,7 +12,7 @@
             </Border.StrokeShape>
             <Label LineBreakMode="WordWrap"
                    Text="{Binding ErrorMessage}"
-                   HorizontalTextAlignment="Justify"
+                   HorizontalTextAlignment="Start"
                    TextColor="Red"
                    FontAttributes="Bold"/>
         </Border>
@@ -58,5 +58,9 @@
                 <Label Text="{}}"/>
             </VerticalStackLayout>
         </Border>
+        <HorizontalStackLayout>
+            <Label Text="Validation status:" Margin="4"/>
+            <Label Text="{Binding VerificationStatus}" TextColor="{Binding VerificationStatusColor}" Margin="4"/>
+        </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentView>

@@ -8,6 +8,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Picker Title="Key source" ItemsSource="{Binding AllSources}" SelectedItem="{Binding SelectedKey}"/>
         <VerticalStackLayout Grid.Row="1" IsVisible="{Binding IsCharactersSelected}">
@@ -55,6 +56,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Text="Selected:" VerticalOptions="Center"/>
             <Border Grid.Column="1" Margin="4,0" Padding="4">
@@ -64,6 +66,17 @@
                 <Label Text="{Binding File.FilePath}" VerticalOptions="Center"/>
             </Border>
             <Button Text="..." Grid.Column="2" Clicked="ChooseFileButton_Clicked" VerticalOptions="Center"/>
+            <Label Text="File Password" Grid.Row="1" VerticalOptions="Center"/>
+            <Entry Text="{Binding File.FileDecriptionPassword}"
+                   IsPassword="True"
+                   Margin="4,4,0,0"
+                   Grid.Row="1"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2"/>
         </Grid>
+        <Label Grid.Row="2"
+               IsVisible="{Binding IsKeyError}"
+               Text="{Binding KeyErrorMessage}"
+               TextColor="Red"/>
     </Grid>
 </ContentView>
