@@ -8,11 +8,11 @@ This tool is open source and deliberately published with permissive license so y
 
 To build it simply clone, switch into directory and run
 ```Shell
-dotnet build
+dotnet build -f net9.0-windows10.0.22621.0 -c Release
 ```
 from command line
-You will need dotnet sdk at least for .net 6
+You will need dotnet sdk at least version .net 9
 
 App has been tested extensively with RSxxx ESxxx and HSxxx tokens from https://jwt.io. PSxxx tokens verification should work as well but has not been tested.
 
-Token verification supports entering plaintext or base64 encoded key for symetric key cryptography jwt signatures and certificate files and public kes in PEM format for asymetric key cryptography signatures. Encrypted PEM key files and PKCS12 file format is not supported since they are usually used to store private keys (along side public keys or certificates in case of PKCS12).
+Token verification supports entering plaintext or base64 encoded key for symetric key cryptography jwt signatures and certificate files and public kes in PEM format for asymetric key cryptography signatures. Encrypted PEM key files are not supported but encrypted PKCS12 are (*.pfx)

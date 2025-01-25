@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:JWTInspector.MAUI.ViewModels"
+             xmlns:v="clr-namespace:JWTInspector.MAUI.Components"
+             x:Class="JWTInspector.MAUI.Components.TokenView"
+             x:DataType="vm:TokenViewModel">
+    <VerticalStackLayout>
+        <Border Padding="4" Margin="0,0,0,4" IsVisible="{Binding HasError}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="4"/>
+            </Border.StrokeShape>
+            <Label LineBreakMode="WordWrap"
+                   Text="{Binding ErrorMessage}"
+                   HorizontalTextAlignment="Start"
+                   TextColor="Red"
+                   FontAttributes="Bold"/>
+        </Border>
+        <Border Padding="4" Margin="0,0,0,4">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="4"/>
+            </Border.StrokeShape>
+            <VerticalStackLayout>
+                <Label Text="Header"/>
+                <Label Text="{}{"/>
+                <CollectionView ItemsSource="{Binding TokenHeader}" Margin="16,0,0,0">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:KeyValueWithTooltipViewModel">
+                            <HorizontalStackLayout ToolTipProperties.Text="{Binding Tooltip}">
+                                <Label Text="{Binding Key}"/>
+                                <Label Text=":" Margin="4,0"/>
+                                <Label Text="{Binding Value}"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label Text="{}}"/>
+            </VerticalStackLayout>
+        </Border>
+        <Border Padding="4" Margin="0,0,0,4">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="4"/>
+            </Border.StrokeShape>
+            <VerticalStackLayout>
+                <Label Text="Content"/>
+                <Label Text="{}{"/>
+                <CollectionView ItemsSource="{Binding TokenContent}" Margin="16,0,0,0">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:KeyValueWithTooltipViewModel">
+                            <HorizontalStackLayout ToolTipProperties.Text="{Binding Tooltip}">
+                                <Label Text="{Binding Key}"/>
+                                <Label Text=":" Margin="4,0"/>
+                                <Label Text="{Binding Value}"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label Text="{}}"/>
+            </VerticalStackLayout>
+        </Border>
+        <HorizontalStackLayout>
+            <Label Text="Validation status:" Margin="4"/>
+            <Label Text="{Binding VerificationStatus}" TextColor="{Binding VerificationStatusColor}" Margin="4"/>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentView>
